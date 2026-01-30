@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 )
 
 func (cfg apiConfig) ensureAssetsDir() error {
@@ -9,4 +10,7 @@ func (cfg apiConfig) ensureAssetsDir() error {
 		return os.Mkdir(cfg.assetsRoot, 0755)
 	}
 	return nil
+}
+func (cfg apiConfig) getAssetDiskPath(assetPath string) string {
+	return filepath.Join(cfg.assetsRoot, assetPath)
 }
