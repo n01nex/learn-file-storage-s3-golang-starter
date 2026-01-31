@@ -72,7 +72,7 @@ func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	// Storing the file on disk
+	// Storing the image file on disk
 	parts := strings.Split(mediaType, "/")
 	if len(parts) != 2 || parts[1] == "" {
 		respondWithError(w, http.StatusBadRequest, "Invalid Content-Type for thumbnail", nil)
@@ -99,7 +99,7 @@ func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Requ
 	}
 
 	thumbURL := fmt.Sprintf("http://localhost:%v/assets/%s.%s", cfg.port, randFileName, imgExtension)
-
+	
 	if video.ThumbnailURL != nil {
 		oldURL := *video.ThumbnailURL
 		filename := path.Base(oldURL)
