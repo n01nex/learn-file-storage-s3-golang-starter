@@ -99,3 +99,21 @@ func processVideoForFastStart(filePath string) (string, error) {
 	}
 	return tempFilePath, nil
 }
+
+/*
+func generatePresignedURL(s3Client *s3.Client, bucket, key string, expireTime time.Duration) (string, error) {
+	s3Presigned := s3.NewPresignClient(s3Client)
+	v4Presigned, err := s3Presigned.PresignGetObject(
+		context.Background(),
+		&s3.GetObjectInput{
+			Bucket: aws.String(bucket),
+			Key:    aws.String(key),
+		},
+		s3.WithPresignExpires(expireTime),
+	)
+	if err != nil {
+		return "", err
+	}
+	return v4Presigned.URL, nil
+}
+*/

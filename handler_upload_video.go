@@ -138,13 +138,45 @@ func (cfg *apiConfig) handlerUploadVideo(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	url := cfg.getObjectURL(key)
+	url := "https://" + cfg.s3CfDistribution + "/" + key
+	//url := cfg.s3Bucket + "," + key
 	video.VideoURL = &url
 	err = cfg.db.UpdateVideo(video)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't update video", err)
 		return
 	}
+	/*
+		if video.VideoURL != nil {
+			video, err = cfg.dbVideoToSignedVideo(video)
+			if err != nil {
+				respondWithError(w, http.StatusInternalServerError, "Couldn't generate presigned URL", err)
+				return
+			}
+		}
+	*/
 
 	respondWithJSON(w, http.StatusOK, video)
 }
+
+/*
+func (cfg *apiConfig) dbVideoToSignedVideo(video database.Video) (database.Video, error) {
+	if video.VideoURL == nil {
+		return video, nil
+	}
+
+	vURLargs := strings.Split(*video.VideoURL, ",")
+	if len(vURLargs) != 2 {
+		return video, errors.New("invalid video URL")
+	}
+	bucket := vURLargs[0]
+	key := vURLargs[1]
+	timeDuration := 60 * time.Second
+	presigned, err := generatePresignedURL(cfg.s3Client, bucket, key, timeDuration)
+	if err != nil {
+		return video, err
+	}
+	video.VideoURL = &presigned
+	return video, nil
+}
+*/
